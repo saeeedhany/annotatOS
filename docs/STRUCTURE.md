@@ -110,9 +110,9 @@ kernel/kernel.c -----------+
 - Clears screen
 - Prints ASCII logo
 - Prints welcome message
-- Shows available commands
-- Demonstrates shell structure
-- Halts peacefully
+- Reads keyboard scancodes from PS/2 controller
+- Executes shell commands (help/about/clear/exit)
+- Powers off QEMU when requested
 
 ## Safety Features
 
@@ -220,8 +220,8 @@ After understanding this structure:
 4. Modify the ASCII logo
 5. Add more shell commands
 6. Learn about Protected Mode
-7. Add keyboard input
-8. Implement real shell
+7. Add command history and tab completion
+8. Add more shell built-ins
 
 This structure is designed to be:
 - Easy to understand

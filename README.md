@@ -7,7 +7,7 @@ A minimal, functional operating system for learning OS development.
 - Boots from disk (BIOS/MBR)
 - Loads kernel safely with error handling
 - Displays ASCII logo
-- Simple shell demonstration
+- Interactive shell with keyboard input
 - Clean, organized code structure
 - Fully commented for learning
 - Safe to experiment with
@@ -29,7 +29,7 @@ make run
 3. ASCII AnnotatOS logo
 4. Welcome message
 5. Available commands
-6. System running message
+6. Interactive command prompt
 
 ## Project Structure
 
@@ -112,22 +112,20 @@ This OS is completely safe:
 
 ## Current Limitations
 
-This is a minimal demonstration kernel:
-- No keyboard input yet (planned)
+This is a minimal educational kernel:
 - No Protected Mode (16-bit only for simplicity)
-- No interrupts/drivers (keeping it minimal)
-- Shell is demonstration only
+- No interrupts/drivers (keyboard uses polling)
+- Shell supports basic built-in commands only
 
 These are intentional to keep code simple and educational.
 
 ## Next Steps
 
 After understanding this minimal version:
-1. Add keyboard input
-2. Implement real shell
-3. Add Protected Mode
-4. Add interrupt handling
-5. Add more drivers
+1. Add command history
+2. Add Protected Mode
+3. Add interrupt handling
+4. Add more drivers
 
 ## Troubleshooting
 
@@ -165,7 +163,7 @@ See `docs/SAFETY.md` for more troubleshooting.
 - Main kernel logic
 - Screen output
 - ASCII logo
-- Shell demo
+- Interactive shell
 
 ### Makefile
 - Builds everything
@@ -178,8 +176,8 @@ See `docs/SAFETY.md` for more troubleshooting.
 2. Bootloader loads `kernel/*.{asm,c}` from disk
 3. Bootloader jumps to kernel
 4. Kernel displays logo and messages
-5. System demonstrates shell structure
-6. System halts peacefully
+5. System accepts interactive shell commands
+6. User can clear screen or exit QEMU
 
 ## Contributing
 
