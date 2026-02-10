@@ -1,5 +1,5 @@
 ################################################################################
-# Makefile - MinimalOS Build System
+# Makefile - AnnotatOS Build System
 ################################################################################
 # Organized structure:
 #   boot/     - Bootloader source
@@ -72,7 +72,7 @@ $(KERNEL_BIN): $(KERNEL_ENTRY_SRC) $(KERNEL_C_SRC)
 
 .PHONY: run
 run: $(OS_IMAGE)
-	@echo "Starting MinimalOS in QEMU..."
+	@echo "Starting AnnotatOS in QEMU..."
 	@echo "Close window to exit"
 	$(QEMU) -drive file=$(OS_IMAGE),format=raw
 
@@ -102,7 +102,7 @@ structure:
 
 .PHONY: help
 help:
-	@echo "MinimalOS Build System"
+	@echo "AnnotatOS Build System"
 	@echo ""
 	@echo "Targets:"
 	@echo "  make          - Build OS image"

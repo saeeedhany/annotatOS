@@ -1,4 +1,4 @@
-# MinimalOS - Educational Operating System
+# AnnotatOS - Educational Operating System
 
 A minimal, functional operating system for learning OS development.
 
@@ -26,7 +26,7 @@ make run
 
 1. Bootloader messages
 2. Kernel loading
-3. ASCII MinimalOS logo
+3. ASCII AnnotatOS logo
 4. Welcome message
 5. Available commands
 6. System running message
@@ -34,7 +34,7 @@ make run
 ## Project Structure
 
 ```
-MinimalOS/
+AnnotatOS/
 ├── boot/           # Bootloader
 ├── kernel/         # Kernel code
 ├── build/          # Build outputs

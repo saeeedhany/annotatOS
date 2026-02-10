@@ -92,7 +92,7 @@ print:
 
 ; Data
 BOOT_DRIVE:     db 0
-msg_boot:       db "MinimalOS Bootloader", 0x0D, 0x0A, 0
+msg_boot:       db "AnnotatOS Bootloader", 0x0D, 0x0A, 0
 msg_loading:    db "Loading kernel...", 0x0D, 0x0A, 0
 msg_success:    db "Kernel loaded, starting...", 0x0D, 0x0A, 0
 msg_error:      db "DISK ERROR - System halted safely", 0x0D, 0x0A, 0
