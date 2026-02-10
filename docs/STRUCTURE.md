@@ -3,7 +3,7 @@
 ## Directory Organization
 
 ```
-MinimalOS/
+AnnotatOS/
 ├── boot/                   # Bootloader code
 │   └── boot.asm           # Main bootloader (512 bytes, loaded by BIOS)
 │

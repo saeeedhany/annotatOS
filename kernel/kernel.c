@@ -31,7 +31,7 @@ int strcmp(const char* s1, const char* s2);
 void kernel_main(void) {
     clear_screen();
     print_logo();
-    print("\nMinimalOS v1.0 - Educational Operating System\n");
+    print("\nAnnotatOS v1.0 - Educational Operating System\n");
     print("Type 'help' for available commands\n\n");
     shell_run();
 
@@ -84,12 +84,12 @@ void print(const char* str) {
 
 void print_logo(void) {
     print("\n");
-    print("  __  __ _       _                 _    ___  ____  \n");
-    print(" |  \\/  (_)     (_)               | |  / _ \\/ ___| \n");
-    print(" | |\\/| |_ _ __  _ _ __ ___   __ _| | | | | \\___ \\ \n");
-    print(" | |  | | | '_ \\| | '_ ` _ \\ / _` | | | |_| |___) |\n");
-    print(" |_|  |_|_|_| |_|_|_| |_| |_|\\__,_|_|  \\___/|____/ \n");
-    print("                                                   \n");
+    print("    _                              _       ___  ____  \n");
+    print("   / \\   _ __  _ __   ___  _ __ _| |_    / _ \\/ ___| \n");
+    print("  / _ \\ | '_ \\| '_ \\ / _ \\| '__| __|  | | | \\___ \\ \n");
+    print(" / ___ \\| | | | | | | (_) | |  | |_   | |_| |___) |\n");
+    print("/_/   \\_\\_| |_|_| |_|\\___/|_|   \\__|   \\___/|____/ \n");
+    print("                    AnnotatOS                      \n");
 }
 
 /**
@@ -164,13 +164,13 @@ void shell_run(void) {
     print("\nAvailable commands:\n");
     print("  help   - Show this help message\n");
     print("  clear  - Clear the screen\n");
-    print("  about  - About MinimalOS\n");
+    print("  about  - About AnnotatOS\n");
     print("  halt   - Halt the system\n");
     print("\nNote: Keyboard input not implemented yet.\n");
     print("This is a minimal demonstration kernel.\n\n");
 
     print("System initialized successfully.\n");
-    print("MinimalOS is running.\n\n");
+    print("AnnotatOS is running.\n\n");
 
     /* Halt peacefully */
     print("System halted. You can close QEMU now.\n");
