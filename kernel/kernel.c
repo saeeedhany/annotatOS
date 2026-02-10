@@ -34,7 +34,7 @@ void kernel_main(void) {
     print("\nMinimalOS v1.0 - Educational Operating System\n");
     print("Type 'help' for available commands\n\n");
     shell_run();
-    
+
     /* Should never reach here */
     while(1) {
         __asm__ __volatile__("hlt");
@@ -81,14 +81,15 @@ void print(const char* str) {
 /**
  * Print ASCII logo
  */
+
 void print_logo(void) {
     print("\n");
     print("  __  __ _       _                 _    ___  ____  \n");
     print(" |  \\/  (_)     (_)               | |  / _ \\/ ___| \n");
     print(" | |\\/| |_ _ __  _ _ __ ___   __ _| | | | | \\___ \\ \n");
     print(" | |  | | | '_ \\| | '_ ` _ \\ / _` | | | |_| |___) |\n");
-    print(" |_|  |_|_| .__/|_|_| |_| |_|\\__,_|_|  \\___/|____/ \n");
-    print("          |_|                                       \n");
+    print(" |_|  |_|_|_| |_|_|_| |_| |_|\\__,_|_|  \\___/|____/ \n");
+    print("                                                   \n");
 }
 
 /**
@@ -99,27 +100,27 @@ void print_number(int num) {
         print("0");
         return;
     }
-    
+
     char buffer[12];
     int i = 0;
     int is_negative = 0;
-    
+
     if (num < 0) {
         is_negative = 1;
         num = -num;
     }
-    
+
     while (num > 0) {
         buffer[i++] = '0' + (num % 10);
         num /= 10;
     }
-    
+
     if (is_negative) {
         buffer[i++] = '-';
     }
-    
+
     buffer[i] = '\0';
-    
+
     /* Reverse the string */
     int j;
     for (j = 0; j < i / 2; j++) {
@@ -127,7 +128,7 @@ void print_number(int num) {
         buffer[j] = buffer[i - 1 - j];
         buffer[i - 1 - j] = temp;
     }
-    
+
     print(buffer);
 }
 
@@ -157,7 +158,7 @@ int strlen(const char* s) {
  */
 void shell_run(void) {
     print("kernel> ");
-    
+
     /* For now, execute a demo command since we don't have keyboard input yet */
     print("help\n");
     print("\nAvailable commands:\n");
@@ -167,10 +168,10 @@ void shell_run(void) {
     print("  halt   - Halt the system\n");
     print("\nNote: Keyboard input not implemented yet.\n");
     print("This is a minimal demonstration kernel.\n\n");
-    
+
     print("System initialized successfully.\n");
     print("MinimalOS is running.\n\n");
-    
+
     /* Halt peacefully */
     print("System halted. You can close QEMU now.\n");
 }
