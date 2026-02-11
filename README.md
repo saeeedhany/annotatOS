@@ -1,9 +1,5 @@
 # AnnotatOS - Educational Operating System
 
-<p align="center">
-    <img src="./assets/images/hmm-view.webp" alt="view" />
-</p>
-
 A minimal, functional operating system for learning OS development.
 
 ## Features
