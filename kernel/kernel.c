@@ -1,9 +1,52 @@
 /**
- * kernel.c - Minimal Kernel with Interactive Keyboard Shell
- * Location: kernel/kernel.c
+ * SYSTEM-LEVEL OVERVIEW
  *
- * This file intentionally includes detailed comments because this project
- * is educational and meant to explain OS basics line by line.
+ * This translation unit implements the runtime core of a tiny monolithic
+ * kernel executing in 16-bit x86 real mode. The code directly manipulates
+ * hardware-visible interfaces (VGA text memory and legacy PS/2 controller
+ * ports) without firmware mediation once control leaves BIOS boot services.
+ *
+ * Boot-time behavior (as seen from this file):
+ * 1) `kernel_main` is entered from `kernel_entry.asm` with flat real-mode
+ *    segments (base 0) and a pre-positioned stack.
+ * 2) Screen memory is cleared, a banner is printed, and shell loop starts.
+ *
+ * Runtime behavior:
+ * 1) Poll keyboard controller status/data ports for Set-1 make codes.
+ * 2) Translate scancodes into ASCII subset.
+ * 3) Mutate in-memory command buffer and VGA memory for TTY-like interaction.
+ * 4) Dispatch built-in commands and return to prompt indefinitely.
+ *
+ * Memory behavior and data layout:
+ * - `vga_buffer` maps physical 0xB8000 where each cell is 16 bits:
+ *   [attribute byte | ASCII byte].
+ * - `cursor_x`/`cursor_y` are global scalar state in `.data` or `.bss`.
+ * - `command_buffer` is a fixed-size stack array in `shell_run`; lifetime is
+ *   per-loop-iteration and capacity is bounded by COMMAND_BUFFER_SIZE.
+ * - No allocator, paging, virtual memory, or process isolation exists.
+ *
+ * CPU-level implications:
+ * - Port I/O uses IN/OUT instructions (`inb`, `outw`) and therefore requires
+ *   ring0-like unrestricted execution (naturally true in real mode).
+ * - Busy-wait keyboard polling consumes CPU cycles continuously; there is no
+ *   interrupt-driven sleep path for input readiness.
+ * - `hlt` is used only in terminal states; main shell loop is active polling.
+ *
+ * Data structures:
+ * - VGA text buffer: conceptual 2D matrix [25 rows][80 cols], stored linearly
+ *   as 2000 contiguous uint16_t entries in row-major order.
+ * - Command parser: null-terminated byte string in a 64-byte local array.
+ *
+ * Limitations and edge cases:
+ * - No Shift/Ctrl state tracking; keyboard mapping is lowercase subset only.
+ * - Backspace is line-local and does not traverse to previous lines.
+ * - String ops are minimal (`strcmp` only) and assume trusted in-kernel data.
+ * - Poweroff ports are emulator-specific and may not work on all machines.
+ * - Shell loop has no timeout or cooperative scheduling.
+ *
+ * Reference hints:
+ * - VGA text memory map: IBM VGA-compatible adapters (mode 03h semantics).
+ * - Keyboard controller ports 0x64/0x60: classic i8042-compatible interface.
  */
 
 /* VGA text mode memory base address (physical memory). */
@@ -305,6 +348,10 @@ static void shell_execute_command(const char* command) {
  * Run the interactive keyboard shell forever.
  */
 void shell_run(void) {
+    /*
+     * Stack-resident command line buffer. Layout is contiguous bytes and always
+     * kept NUL-terminated after each edit to make strcmp dispatch safe.
+     */
     char command_buffer[COMMAND_BUFFER_SIZE];
 
     while (1) {

@@ -1,10 +1,34 @@
 ################################################################################
-# Makefile - AnnotatOS Build System
+# SYSTEM-LEVEL OVERVIEW
 ################################################################################
-# Organized structure:
-#   boot/     - Bootloader source
-#   kernel/   - Kernel source
-#   build/    - Build artifacts
+# This Makefile describes the host-side build pipeline that transforms source
+# artifacts (16-bit assembly + freestanding C) into a BIOS-bootable floppy
+# image. It is not executed by the target machine; it governs how host tools
+# produce bytes that the machine will execute.
+#
+# Build-time flow:
+#   1) Assemble boot sector as flat 512-byte binary.
+#   2) Assemble kernel entry trampoline to ELF32 object.
+#   3) Compile kernel C to ELF32 object using freestanding/no-libc flags.
+#   4) Link objects with linker.ld into flat binary at load address 0x1000.
+#   5) Compose final disk image: boot sector at LBA0, kernel at following LBAs.
+#
+# Memory model relevance:
+#   - Build artifacts intentionally encode runtime memory expectations:
+#       * boot.bin executes at 0x7C00 (BIOS convention)
+#       * kernel.bin linked for 0x1000 (bootloader destination)
+#   - Floppy image uses 2880 sectors (1.44MB) with raw sector addressing.
+#
+# CPU-level relevance:
+#   - `-m16` drives generation of 16-bit compatible code paths.
+#   - `-ffreestanding -nostdlib -nostdinc` avoids assumptions about user-space
+#     runtime, startup CRT, or host-provided system libraries.
+#
+# Limitations and edge cases:
+#   - Pipeline assumes required host tools are installed (nasm/gcc/ld/qemu).
+#   - Kernel placement is static; no size guard beyond floppy capacity and the
+#     bootloader's sector-read limit.
+#   - `run` target depends on QEMU defaults that may vary by host environment.
 ################################################################################
 
 # Tools
@@ -41,7 +65,7 @@ KERNEL_C_SRC = $(KERNEL_DIR)/kernel.c
 .PHONY: all
 all: $(OS_IMAGE)
 
-# Create bootable disk image
+# Compose a bootable floppy image with deterministic sector placement.
 $(OS_IMAGE): $(BOOT_BIN) $(KERNEL_BIN)
 	@echo "Creating disk image..."
 	@mkdir -p $(BUILD_DIR)
@@ -50,14 +74,14 @@ $(OS_IMAGE): $(BOOT_BIN) $(KERNEL_BIN)
 	dd if=$(KERNEL_BIN) of=$(OS_IMAGE) bs=512 seek=1 conv=notrunc 2>/dev/null
 	@echo "Done: $(OS_IMAGE)"
 
-# Build bootloader
+# Build 512-byte BIOS boot sector.
 $(BOOT_BIN): $(BOOT_SRC)
 	@echo "Building bootloader..."
 	@mkdir -p $(BUILD_DIR)
 	$(AS) $(ASFLAGS_BIN) $(BOOT_SRC) -o $(BOOT_BIN)
 	@echo "Bootloader: $(BOOT_BIN)"
 
-# Build kernel
+# Build kernel binary from assembly entry + C runtime.
 $(KERNEL_BIN): $(KERNEL_ENTRY_SRC) $(KERNEL_C_SRC)
 	@echo "Building kernel..."
 	@mkdir -p $(BUILD_DIR)
