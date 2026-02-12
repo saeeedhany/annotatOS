@@ -1,6 +1,6 @@
 # AnnotatOS - Educational Operating System
 
-```
+```c
 void print_logo(void) {
     print("\n");
     print("  █████╗ ███╗   ██╗███╗   ██╗ ██████╗ ████████╗ █████╗ ████████╗ ██████╗ ███████╗\n");
