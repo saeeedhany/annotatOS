@@ -5,6 +5,7 @@
 ; POST firmware sequence. BIOS copies this sector from disk LBA 0 to physical
 ; address 0x0000:0x7C00 and transfers control to `start` in 16-bit real mode.
 ;
+;
 ; Boot-time behavior:
 ;   1) Establishes a deterministic 16-bit execution context (segments + stack).
 ;   2) Uses BIOS interrupt services to print status and read kernel sectors.
